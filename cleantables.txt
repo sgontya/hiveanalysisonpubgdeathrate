@@ -1,0 +1,35 @@
+--cleaning aggregate_0
+
+CREATE TABLE cln_agg_0
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/cln_agg_0'
+AS 
+SELECT
+date_time, game_size, match_id, match_mode, party_size, player_assists, player_dbno, player_dist_ride, player_dist_walk, player_dmg, player_kills, player_name, player_survive_time, team_id, team_placement from aggregate_0
+where 
+player_name != ' '
+;
+
+--cleaning kills_0
+
+CREATE TABLE cln_kills_0
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/cln_kills_0'
+AS 
+SELECT
+killed_by, killer_name, killer_placement, killer_position_x, killer_position_y, map_location, match_id, time, victim_name,  victim_placement, victim_position_x, victim_position_y from kills_0
+where 
+killer_name != ' ' OR killer_placement != ' ' OR killer_position_x != ' ' OR killer_position_y != ' ' OR map_location != ' ' OR victim_placement != ' ' LIMIT 10
+;
+
+--cleaning pubg
+
+CREATE TABLE cln_pubg
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/cln_pubg'
+AS 
+SELECT
+date_time, game_size, match_id, match_mode, party_size, player_assists, player_dbno, player_dist_ride, player_dist_walk, player_dmg, player_kills, player_name, player_survive_time, team_id, team_placement, killed_by, killer_name, killer_placement, killer_position_x, killer_position_y, map_location, time, victim_name,  victim_placement, victim_position_x, victim_position_y from pubg
+where 
+player_name != ' ' OR killer_name != ' ' OR killer_placement != ' ' OR killer_position_x != ' ' OR killer_position_y != ' ' OR map_location != ' ' OR victim_placement != ' '
+;
