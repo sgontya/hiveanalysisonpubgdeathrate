@@ -1,0 +1,164 @@
+--map location people are interested in:
+
+CREATE TABLE map_location
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/map_location'
+AS
+SELECT map_location, COUNT(map_location)
+FROM cln_kills_0
+WHERE map_location IN ('ERANGEL' , 'MIRAMAR')
+GROUP BY map_location
+HAVING COUNT(map_location) > 1;
+
+--party size people are interested in:
+
+CREATE TABLE party_size
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/party_size'
+AS
+SELECT party_size, COUNT(party_size)
+FROM cln_agg_0
+GROUP BY party_size
+HAVING COUNT(party_size) > 0;
+
+--number of kills by a player
+
+CREATE TABLE player_kills
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/player_kills/'
+AS
+SELECT player_kills, COUNT(player_kills)
+FROM cln_agg_0
+GROUP BY player_kills
+HAVING COUNT(player_kills) > 1
+ORDER BY player_kills desc LIMIT 10;
+
+--assist points scored by the players
+
+CREATE TABLE player_assists
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/player_assists/'
+AS
+SELECT player_assists, COUNT(player_assists)
+FROM cln_agg_0
+GROUP BY player_assists
+HAVING COUNT(player_assists) > 1
+ORDER BY player_assists asc;
+
+--survival time of the players
+
+CREATE TABLE survival_time
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/survival_time/'
+AS
+SELECT time, COUNT(time)
+FROM cln_kills_0
+GROUP BY time
+HAVING COUNT(time) > 1;
+
+--Highest distance covered
+
+CREATE TABLE dist_covered_team
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/dist_covered_team'
+AS
+SELECT team_id, (player_dist_ride + player_dist_walk) AS total_dist
+FROM cln_agg_0
+ORDER BY total_dist DESC
+LIMIT 10
+;
+
+
+--COORDINATES WITH HIGHEST NUMBER OF CASUALTIES(killer's position)
+
+CREATE TABLE killers_coordinates
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/killers_coordinates'
+AS
+SELECT killer_position_x, killer_position_y, COUNT(victim_name) as casualties
+FROM cln_kills_0
+WHERE killer_position_x != 'NULL' OR killer_position_x != '0.0'
+GROUP BY killer_position_x, killer_position_y
+ORDER BY casualties desc
+LIMIT 10
+;
+
+--COORDINATES WITH HIGHEST NUMBER OF CASUALTIES(Victim's position)
+
+CREATE TABLE victim_coordinates
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/victim_coordinates'
+AS
+SELECT victim_position_x, victim_position_y, COUNT(victim_name) as casualties
+FROM cln_kills_0
+WHERE victim_position_x != '0.0'
+GROUP BY victim_position_x, victim_position_y
+ORDER BY casualties desc
+LIMIT 10
+;
+
+--DISTANCE COVERED ON FOOT
+
+CREATE TABLE distance_on_foot
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/distance_on_foot'
+AS
+SELECT player_name, player_dist_walk
+FROM cln_agg_0
+ORDER BY player_dist_walk DESC
+LIMIT 10
+;
+
+--HIGHEST NUMBER OF KILLS
+
+CREATE TABLE highest_kills
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/highest_kills'
+AS
+SELECT killer_name, match_id, COUNT(victim_name) AS total_victims
+FROM cln_kills_0
+GROUP BY killer_name, match_id
+HAVING COUNT(*)>60
+ORDER BY total_victims desc
+LIMIT 20      
+ ;
+
+--HIGHEST SURVIVAL TIME
+
+CREATE TABLE highest_survival_time
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/highest_survival_time'
+AS
+SELECT team_id, count(player_survive_time) as team_survive_time 
+from cln_agg_0 
+WHERE party_size = 1
+GROUP 
+BY team_id
+ORDER BY team_survive_time desc
+LIMIT 10;
+
+--HIGHEST KILLS-SINGLE PLAYER
+
+CREATE TABLE highest_single_kills
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/highest_single_kills'
+AS
+SELECT team_id, party_size, count(player_kills) as team_kills
+FROM cln_agg_0
+WHERE party_size = 1
+GROUP BY team_id, party_size 
+ORDER BY team_kills DESC
+LIMIT 10
+;
+
+--REASONS FOR DEATH OF A PLAYER
+
+CREATE TABLE Reason_for_death
+ROW FORMAT DELIMITED  FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/Reason_for_death'
+AS
+SELECT killed_by, COUNT(killed_by) AS Num_of_kills
+FROM cln_kills_0
+GROUP BY killed_by
+HAVING COUNT(killed_by) > 1
+ORDER BY Num_of_kills DESC;
