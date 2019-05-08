@@ -1,0 +1,20 @@
+--create table for aggregate_0
+
+CREATE EXTERNAL TABLE IF NOT EXISTS aggregate_0(date_time BIGINT,game_size INT,match_id STRING,match_mode STRING,party_size INT,player_assists INT,player_dbno INT,player_dist_ride FLOAT,player_dist_walk FLOAT,player_dmg INT,player_kills INT,player_name STRING,player_survive_time FLOAT,team_id INT,team_placement INT) 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' 
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/agg_0' 
+TBLPROPERTIES ('skip.header.line.count'='1');
+
+--create table for kills_0
+
+CREATE EXTERNAL TABLE IF NOT EXISTS kills_0(killed_by STRING,killer_name STRING,killer_placement INT,killer_position_x FLOAT,killer_position_y FLOAT,map_location STRING,match_id STRING,time INT,victim_name STRING,victim_placement INT,victim_position_x FLOAT,victim_position_y FLOAT) 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' 
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/kill_0' 
+TBLPROPERTIES ('skip.header.line.count'='1');
+
+--create table for pubg
+
+CREATE EXTERNAL TABLE IF NOT EXISTS pubg(date_time BIGINT,game_size INT,match_id STRING,match_mode STRING,party_size INT,player_assists INT,player_dbno INT,player_dist_ride FLOAT,player_dist_walk FLOAT,player_dmg INT,player_kills INT,player_name STRING,player_survive_time FLOAT,team_id INT,team_placement INT, killed_by STRING,killer_name STRING,killer_placement INT,killer_position_x FLOAT,killer_position_y FLOAT,map_location STRING,time INT,victim_name STRING,victim_placement INT,victim_position_x FLOAT,victim_position_y FLOAT) 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' 
+STORED AS TEXTFILE LOCATION '/user/sgontya/Group4/pubg_full' 
+TBLPROPERTIES ('skip.header.line.count'='1');
